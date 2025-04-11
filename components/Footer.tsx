@@ -27,10 +27,10 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-sm">
-              <li>123 Safety Street</li>
-              <li>Mumbai, Maharashtra</li>
-              <li>India - 400001</li>
-              <li>Tel: +91 22 1234 5678</li>
+              <li>K-bot</li>
+              <li>Kathmandu, Bagmati</li>
+              <li>Nepal - 44600</li>
+              <li>Tel: +977-9800000000</li>
             </ul>
           </div>
           
