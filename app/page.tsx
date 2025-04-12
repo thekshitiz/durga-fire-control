@@ -16,7 +16,7 @@ const features = [
   {
     icon: Trophy,
     title: 'Industry Leader',
-    description: 'Trusted by top businesses across India for over 25 years.'
+    description: 'Trusted by top businesses across Nepal for over 25 years.'
   },
   {
     icon: Clock,
