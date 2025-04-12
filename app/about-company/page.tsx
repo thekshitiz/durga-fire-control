@@ -1,115 +1,159 @@
+'use client'
+
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { ShieldCheck, Zap, PackageCheck, Users } from 'lucide-react'
 import { WhyChooseUsItem } from '@/components/about/why-choose-us-item'
 
+const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 },
+}
+
 export default function AboutCompany() {
     return (
-        <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
+        <div className="container mx-auto px-4 py-16 md:py-20 lg:py-24 space-y-16 md:space-y-20 lg:space-y-24">
             {/* Hero Section */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center text-primary">
-                About Durga Fire Control
-            </h1>
-
-            {/* Introduction Section */}
-            <section className="mb-12 md:mb-16">
-                <p className="text-lg md:text-xl text-center text-muted-foreground max-w-3xl mx-auto">
-                    Welcome to Durga Fire Control, your trusted partner in fire
-                    safety and protection since 1995. We are dedicated to
-                    safeguarding lives and property through comprehensive fire
-                    safety solutions for businesses, industries, and homes
-                    across Nepal.
+            <motion.div
+                initial={fadeIn.initial}
+                animate={fadeIn.animate}
+                transition={fadeIn.transition}
+                className="text-center space-y-6"
+            >
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary tracking-tight">
+                    About Durga Fire Control
+                </h1>
+                <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                    Since 1995, we've been at the forefront of fire safety in
+                    Nepal, protecting lives and properties with unwavering
+                    dedication and expertise.
                 </p>
-            </section>
+            </motion.div>
 
-            {/* Grid for Mission, History, Values */}
-            <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-16">
-                <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h2 className="text-2xl font-semibold mb-4 text-card-foreground">
+            {/* Mission, History, Values Grid */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12"
+            >
+                <div className="bg-card p-8 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
+                    <h2 className="text-2xl font-semibold mb-4 text-primary">
+                        Our Legacy
+                    </h2>
+                    <p className="text-muted-foreground leading-relaxed">
+                        From our humble beginnings in 1995, we've grown into
+                        Nepal's trusted leader in fire safety. Our journey is
+                        marked by continuous innovation and an unwavering
+                        commitment to excellence.
+                    </p>
+                </div>
+
+                <div className="bg-card p-8 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
+                    <h2 className="text-2xl font-semibold mb-4 text-primary">
                         Our Mission
                     </h2>
-                    <p className="text-muted-foreground">
-                        To be the leading provider of reliable and innovative
-                        fire safety solutions, ensuring the highest standards of
-                        protection and peace of mind for our clients through
-                        quality products and exceptional service.
+                    <p className="text-muted-foreground leading-relaxed">
+                        To pioneer innovative fire safety solutions that set
+                        industry standards, ensuring unparalleled protection and
+                        peace of mind through excellence in service and
+                        technology.
                     </p>
                 </div>
 
-                <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h2 className="text-2xl font-semibold mb-4 text-card-foreground">
-                        Our History
-                    </h2>
-                    <p className="text-muted-foreground">
-                        Founded in 1995, Durga Fire Control has grown from a
-                        small supplier to a recognized leader in the fire safety
-                        industry. Our commitment to quality and customer
-                        satisfaction has been the cornerstone of our success for
-                        nearly three decades.
-                    </p>
-                </div>
-
-                <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h2 className="text-2xl font-semibold mb-4 text-card-foreground">
+                <div className="bg-card p-8 rounded-xl border shadow-sm hover:shadow-md transition-shadow">
+                    <h2 className="text-2xl font-semibold mb-4 text-primary">
                         Our Values
                     </h2>
-                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                        <li>Safety First</li>
-                        <li>Integrity & Trust</li>
-                        <li>Customer Focus</li>
-                        <li>Quality & Reliability</li>
-                        <li>Continuous Improvement</li>
+                    <ul className="space-y-3 text-muted-foreground">
+                        <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                            <span>Unwavering Commitment to Safety</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                            <span>Excellence in Service</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                            <span>Innovation & Adaptation</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/80" />
+                            <span>Customer-First Approach</span>
+                        </li>
                     </ul>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Why Choose Us Section */}
-            <section className="mb-12 md:mb-16 bg-secondary/50 p-8 rounded-lg">
-                <h2 className="text-3xl font-semibold mb-6 text-center">
+            <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="bg-secondary/30 p-12 rounded-2xl"
+            >
+                <h2 className="text-3xl font-bold mb-8 text-center">
                     Why Choose Durga Fire Control?
                 </h2>
-                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <WhyChooseUsItem
                         icon={ShieldCheck}
-                        title="Expertise"
-                        description="Decades of experience in fire safety assessment, installation, and maintenance."
+                        title="Industry Expertise"
+                        description="Three decades of excellence in fire safety assessment, installation, and maintenance."
                     />
                     <WhyChooseUsItem
                         icon={PackageCheck}
-                        title="Quality Products"
-                        description="Offering a wide range of certified and reliable fire safety equipment."
+                        title="Premium Solutions"
+                        description="Curated selection of internationally certified fire safety equipment."
                     />
                     <WhyChooseUsItem
                         icon={Zap}
-                        title="Comprehensive Solutions"
-                        description="From consultation to after-sales support, we cover all your fire safety needs."
+                        title="End-to-End Service"
+                        description="Comprehensive solutions from initial consultation to ongoing support."
                     />
                     <WhyChooseUsItem
                         icon={Users}
-                        title="Customer Support"
-                        description="Dedicated team ready to assist you with prompt and professional service."
+                        title="Dedicated Support"
+                        description="Round-the-clock assistance from our experienced professional team."
                     />
                 </div>
-            </section>
+            </motion.section>
 
             {/* Call to Action Section */}
-            <section className="text-center">
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-                    Secure Your Safety Today
-                </h2>
-                <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                    Don't wait for an emergency. Contact us for a consultation
-                    or explore our range of fire safety products.
-                </p>
+            <motion.section
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="text-center space-y-6"
+            >
+                <div className="space-y-4">
+                    <h2 className="text-3xl md:text-4xl font-bold">
+                        Partner with Excellence
+                    </h2>
+                    <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+                        Join the countless businesses and institutions that
+                        trust Durga Fire Control for their fire safety needs.
+                    </p>
+                </div>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
-                    <Button asChild size="lg">
-                        <Link href="/contact">Contact Us</Link>
+                    <Button asChild size="lg" className="text-base">
+                        <Link href="/contact">Schedule a Consultation</Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg">
-                        <Link href="/catalog">View Products</Link>
+                    <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="text-base"
+                    >
+                        <Link href="/catalog">Explore Our Solutions</Link>
                     </Button>
                 </div>
-            </section>
+            </motion.section>
         </div>
     )
 }
