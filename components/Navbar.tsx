@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { ContactModal } from '@/components/ContactModal'
+
 import Link from 'next/link'
 import { Flame, Menu, X, ChevronDown, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -25,29 +27,37 @@ const aboutItems = [
 
 const ContactButton = () => {
     const [isHovered, setIsHovered] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     return (
-        <Button
-            variant="default"
-            className="bg-red-600 hover:bg-red-700 text-white relative group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            asChild
-        >
-            <Link href="/contact" className="flex items-center gap-2">
-                Contact
-                <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{
-                        opacity: isHovered ? 1 : 0,
-                        x: isHovered ? 0 : -10,
-                    }}
-                    transition={{ duration: 0.2 }}
-                >
-                    <ArrowRight className="h-4 w-4" />
-                </motion.div>
-            </Link>
-        </Button>
+        <>
+            <Button
+                variant="default"
+                className="bg-red-600 hover:bg-red-700 text-white relative group"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={() => setIsModalOpen(true)}
+            >
+                <span className="flex items-center gap-2">
+                    Contact
+                    <motion.div
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{
+                            opacity: isHovered ? 1 : 0,
+                            x: isHovered ? 0 : -10,
+                        }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <ArrowRight className="h-4 w-4" />
+                    </motion.div>
+                </span>
+            </Button>
+            
+            <ContactModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+            />
+        </>
     )
 }
 
