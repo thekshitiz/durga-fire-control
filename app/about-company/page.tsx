@@ -1,16 +1,80 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { ShieldCheck, Zap, PackageCheck, Users } from 'lucide-react'
+import {
+    ShieldCheck,
+    Zap,
+    PackageCheck,
+    Users,
+    Clock,
+    Star,
+    Award,
+    ArrowRight,
+    FlameKindling,
+} from 'lucide-react'
 import { WhyChooseUsItem } from '@/components/about/why-choose-us-item'
 
+// Animation variants
 const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.6 },
 }
+
+const timelineItems = [
+    {
+        year: '1995',
+        title: 'Our Beginning',
+        description:
+            'Founded with a vision to revolutionize fire safety in Nepal.',
+        icon: FlameKindling,
+    },
+    {
+        year: '2005',
+        title: 'Market Leadership',
+        description:
+            'Became the leading provider of fire safety solutions in Kathmandu.',
+        icon: Star,
+    },
+    {
+        year: '2015',
+        title: 'National Recognition',
+        description:
+            'Expanded operations nationwide, serving major institutions.',
+        icon: Award,
+    },
+    {
+        year: '2025',
+        title: 'Innovation Hub',
+        description:
+            'Pioneering smart fire safety solutions for the digital age.',
+        icon: Clock,
+    },
+]
+
+const leadershipTeam = [
+    {
+        name: 'Rajesh Kumar',
+        position: 'Chief Executive Officer',
+        image: '/team/ceo.jpg',
+        bio: 'With over 25 years of experience in fire safety, Rajesh leads our mission to protect lives and properties across Nepal.',
+    },
+    {
+        name: 'Priya Sharma',
+        position: 'Technical Director',
+        image: '/team/technical-director.jpg',
+        bio: 'An expert in fire safety systems with international certifications, ensuring the highest standards in all our installations.',
+    },
+    {
+        name: 'Arun Thapa',
+        position: 'Operations Head',
+        image: '/team/operations-head.jpg',
+        bio: 'Leading our service teams to deliver excellence in installation and maintenance across the country.',
+    },
+]
 
 export default function AboutCompany() {
     return (
@@ -23,12 +87,13 @@ export default function AboutCompany() {
                 className="text-center space-y-6"
             >
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary tracking-tight">
-                    About Durga Fire Control
+                    Protecting Lives Since 1995
                 </h1>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Since 1995, we've been at the forefront of fire safety in
-                    Nepal, protecting lives and properties with unwavering
-                    dedication and expertise.
+                    At Durga Fire Control, we don't just sell fire safety
+                    equipment – we provide peace of mind. For over 25 years,
+                    we've been the trusted guardian of Nepal's homes,
+                    businesses, and communities.
                 </p>
             </motion.div>
 
@@ -88,6 +153,111 @@ export default function AboutCompany() {
                 </div>
             </motion.div>
 
+            {/* Timeline Section */}
+            <motion.section
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="py-12"
+            >
+                <h2 className="text-3xl font-bold text-center mb-12">
+                    Our Journey of Growth
+                </h2>
+                <div className="relative">
+                    {/* Timeline line */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-primary/20" />
+
+                    {/* Timeline items */}
+                    <div className="space-y-16">
+                        {timelineItems.map((item, index) => (
+                            <motion.div
+                                key={item.year}
+                                initial={{
+                                    opacity: 0,
+                                    x: index % 2 === 0 ? -50 : 50,
+                                }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{
+                                    duration: 0.6,
+                                    delay: index * 0.2,
+                                }}
+                                className={`flex items-center ${
+                                    index % 2 === 0 ? 'flex-row-reverse' : ''
+                                }`}
+                            >
+                                <div className="w-1/2 px-6">
+                                    <div
+                                        className={`bg-card p-6 rounded-xl border shadow-sm ${
+                                            index % 2 === 0
+                                                ? 'text-right'
+                                                : 'text-left'
+                                        }`}
+                                    >
+                                        <span className="text-primary font-bold text-xl">
+                                            {item.year}
+                                        </span>
+                                        <h3 className="text-xl font-semibold mt-2">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-muted-foreground mt-2">
+                                            {item.description}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="z-10 flex items-center justify-center w-8 h-8 rounded-full bg-primary">
+                                    <item.icon className="w-4 h-4 text-white" />
+                                </div>
+                                <div className="w-1/2" />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </motion.section>
+
+            {/* Leadership Team Section */}
+            <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="py-12"
+            >
+                <h2 className="text-3xl font-bold text-center mb-12">
+                    Meet Our Leadership
+                </h2>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {leadershipTeam.map((member) => (
+                        <motion.div
+                            key={member.name}
+                            whileHover={{ y: -5 }}
+                            className="bg-card rounded-xl overflow-hidden border shadow-sm"
+                        >
+                            <div className="aspect-[4/3] relative">
+                                <Image
+                                    src={member.image}
+                                    alt={member.name}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                            <div className="p-6">
+                                <h3 className="text-xl font-semibold">
+                                    {member.name}
+                                </h3>
+                                <p className="text-primary font-medium mt-1">
+                                    {member.position}
+                                </p>
+                                <p className="text-muted-foreground mt-3">
+                                    {member.bio}
+                                </p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </motion.section>
+
             {/* Why Choose Us Section */}
             <motion.section
                 initial={{ opacity: 0, y: 20 }}
@@ -123,26 +293,30 @@ export default function AboutCompany() {
                 </div>
             </motion.section>
 
-            {/* Call to Action Section */}
+            {/* Enhanced Call to Action Section */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="text-center space-y-6"
+                className="text-center space-y-6 bg-primary/5 rounded-3xl p-12"
             >
-                <div className="space-y-4">
+                <div className="space-y-4 max-w-3xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-bold">
-                        Partner with Excellence
+                        Let's Protect What Matters Most
                     </h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                        Join the countless businesses and institutions that
-                        trust Durga Fire Control for their fire safety needs.
+                    <p className="text-muted-foreground text-lg">
+                        Every minute counts when it comes to fire safety. Join
+                        the thousands of businesses and families who trust Durga
+                        Fire Control to protect their most valuable assets.
                     </p>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <Button asChild size="lg" className="text-base">
-                        <Link href="/contact">Schedule a Consultation</Link>
+                        <Link href="/contact">
+                            Schedule a Free Safety Assessment{' '}
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
                     </Button>
                     <Button
                         asChild
@@ -150,7 +324,7 @@ export default function AboutCompany() {
                         size="lg"
                         className="text-base"
                     >
-                        <Link href="/catalog">Explore Our Solutions</Link>
+                        <Link href="/catalog">Browse Our Safety Solutions</Link>
                     </Button>
                 </div>
             </motion.section>

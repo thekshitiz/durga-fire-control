@@ -1,4 +1,5 @@
 import { LucideIcon } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 interface WhyChooseUsItemProps {
     icon: LucideIcon
@@ -12,15 +13,21 @@ export function WhyChooseUsItem({
     description,
 }: WhyChooseUsItemProps) {
     return (
-        <div className="flex items-start space-x-3">
-            <Icon
-                className="h-5 w-5 text-primary mt-1 flex-shrink-0"
-                aria-hidden="true"
-            />
-            <div>
-                <h3 className="font-semibold">{title}</h3>
-                <p className="text-sm text-muted-foreground">{description}</p>
+        <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="bg-background p-6 rounded-xl border shadow-sm"
+        >
+            <div className="flex gap-4">
+                <div className="shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <Icon className="w-6 h-6 text-primary" />
+                    </div>
+                </div>
+                <div>
+                    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                    <p className="text-muted-foreground">{description}</p>
+                </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
