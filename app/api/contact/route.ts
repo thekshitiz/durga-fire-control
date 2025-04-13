@@ -1,9 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server'
-import * as nodemailer from 'nodemailer'
+import { NextResponse } from 'next/server'
+import nodemailer from 'nodemailer'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        console.error('Missing email configuration')
+        return NextResponse.json(
+            { error: 'Email service not configured' },
+            { status: 500 }
+        )
+    }
+
     try {
-        const data = await request.json()
+        const body = await request.json()
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -13,75 +21,80 @@ export async function POST(request: NextRequest) {
             },
         })
 
+        const {
+            firstName,
+            lastName,
+            email,
+            phone,
+            enquiryType,
+            customSubject,
+            message,
+        } = body
         const subject =
-            data.enquiryType === 'other'
-                ? data.customSubject
-                : `New ${data.enquiryType} Inquiry from ${data.firstName} ${data.lastName}`
+            enquiryType === 'other'
+                ? customSubject
+                : `${enquiryType.charAt(0).toUpperCase() + enquiryType.slice(1)} Inquiry from ${firstName} ${lastName}`
 
         const mailOptions = {
             from: process.env.GMAIL_USER,
-            to: 'info@durgafirecontrol.com',
-            replyTo: data.email,
+            to: process.env.GMAIL_USER,
+            replyTo: email,
             subject: subject,
-            text: `
-Name: ${data.firstName} ${data.lastName}
-Email: ${data.email}
-Phone: ${data.phone}
-Enquiry Type: ${data.enquiryType}
-${data.customSubject ? `Custom Subject: ${data.customSubject}\n` : ''}
-
-Message:
-${data.message}
-            `,
             html: `
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-    <h2 style="color: #333;">New Contact Form Submission</h2>
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Name:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;">${data.firstName} ${data.lastName}</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${data.email}">${data.email}</a></td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Phone:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="tel:${data.phone}">${data.phone}</a></td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Enquiry Type:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;">${data.enquiryType}</td>
-        </tr>
-        ${
-            data.customSubject
-                ? `
-        <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Custom Subject:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #eee;">${data.customSubject}</td>
-        </tr>
-        `
-                : ''
-        }
-    </table>
-    <div style="margin-top: 20px;">
-        <h3 style="color: #333;">Message:</h3>
-        <p style="white-space: pre-line; background: #f5f5f5; padding: 15px; border-radius: 5px;">${data.message}</p>
-    </div>
-</div>
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 5px;">
+                    <h1 style="color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">New Contact Form Submission</h1>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee; width: 120px;"><strong>Name:</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${firstName} ${lastName}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Email:</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><a href="mailto:${email}" style="color: #007bff; text-decoration: none;">${email}</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Phone:</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><a href="tel:${phone}" style="color: #007bff; text-decoration: none;">${phone}</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Inquiry Type:</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${enquiryType.charAt(0).toUpperCase() + enquiryType.slice(1)}</td>
+                        </tr>
+                    </table>
+
+                    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 20px;">
+                        <h2 style="color: #333; margin-top: 0; font-size: 18px;">Message:</h2>
+                        <p style="color: #666; line-height: 1.6; margin-bottom: 0; white-space: pre-wrap;">${message}</p>
+                    </div>
+
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                        <p>This email was sent from your website's contact form. You can reply directly to this email to respond to ${firstName}.</p>
+                    </div>
+                </div>
             `,
         }
 
-        await transporter.sendMail(mailOptions)
+        await new Promise((resolve, reject) => {
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error)
+                    reject(error)
+                } else {
+                    console.log('Email sent successfully:', info.response)
+                    resolve(info)
+                }
+            })
+        })
 
         return NextResponse.json(
             { message: 'Email sent successfully' },
             { status: 200 }
         )
     } catch (error) {
-        console.error('Error sending email:', error)
+        console.error('Failed to send email:', error)
         return NextResponse.json(
-            { error: 'Failed to send email' },
+            { error: 'Failed to send email. Please try again later.' },
             { status: 500 }
         )
     }

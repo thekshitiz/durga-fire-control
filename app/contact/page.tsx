@@ -77,20 +77,31 @@ export default function ContactPage() {
                 body: JSON.stringify(data),
             })
 
-            if (!response.ok) throw new Error('Failed to send message')
+            const result = await response.json()
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to send message')
+            }
 
             toast.success(
                 "Message sent successfully! We'll get back to you soon.",
                 {
                     icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+                    duration: 5000,
+                    className: 'bg-background border-border',
                 }
             )
             form.reset()
             setShowCustomSubject(false)
-        } catch (error) {
-            toast.error('Failed to send message. Please try again.', {
-                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-            })
+        } catch (error: any) {
+            toast.error(
+                error.message || 'Failed to send message. Please try again.',
+                {
+                    icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                    duration: 5000,
+                    className: 'bg-background border-border',
+                }
+            )
         } finally {
             setIsSubmitting(false)
         }
@@ -105,12 +116,12 @@ export default function ContactPage() {
                 className="text-center max-w-3xl mx-auto mb-12"
             >
                 <h1 className="text-4xl font-bold tracking-tight mb-4">
-                    Get In Touch
+                    Let's Start a Conversation
                 </h1>
                 <p className="text-lg text-muted-foreground">
-                    We're here to help with any questions or concerns you may
-                    have. Contact us via the form below and a member of our team
-                    will get back to you promptly.
+                    Whether you need fire safety solutions, technical support,
+                    or just want to learn more about our services - we're ready
+                    to help you every step of the way.
                 </p>
             </motion.div>
 
@@ -121,7 +132,7 @@ export default function ContactPage() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="md:col-span-7"
                 >
-                    <div className="bg-card p-8 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] backdrop-blur-sm border border-muted/50">
+                    <div className="bg-card p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.07)] backdrop-blur-sm border border-muted/50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-shadow duration-300">
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(handleSubmit)}
@@ -268,27 +279,23 @@ export default function ContactPage() {
                                 />
                                 <Button
                                     type="submit"
-                                    className="w-full"
+                                    className="w-full relative group"
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? (
                                         <motion.div
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            className="flex items-center space-x-2"
+                                            className="flex items-center justify-center space-x-2"
                                         >
                                             <span className="loading loading-spinner loading-sm"></span>
                                             <span>Sending...</span>
                                         </motion.div>
                                     ) : (
-                                        <motion.div
-                                            className="flex items-center space-x-2"
-                                            whileTap={{ scale: 0.95 }}
-                                        >
-                                            <Send className="h-5 w-5" />
+                                        <span className="flex items-center justify-center space-x-2">
                                             <span>Send Message</span>
-                                        </motion.div>
+                                            <Send className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                                        </span>
                                     )}
                                 </Button>
                             </form>
@@ -303,7 +310,7 @@ export default function ContactPage() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="md:col-span-5 space-y-8"
                 >
-                    <div className="bg-card p-8 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] backdrop-blur-sm border border-muted/50">
+                    <div className="bg-card p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.07)] backdrop-blur-sm border border-muted/50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-shadow duration-300">
                         <div className="space-y-6">
                             <div className="flex items-start gap-4">
                                 <div className="p-3 rounded-lg bg-primary/10">
