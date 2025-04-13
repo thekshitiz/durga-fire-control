@@ -1,10 +1,19 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, MapPin, Phone, Clock } from 'lucide-react'
+import {
+    Mail,
+    MapPin,
+    Phone,
+    Clock,
+    CheckCircle,
+    Send,
+    AlertCircle,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from 'sonner'
 import {
     Select,
     SelectContent,
@@ -13,26 +22,82 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form'
+
+const formSchema = z.object({
+    firstName: z.string().min(2, 'First name must be at least 2 characters'),
+    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+    email: z.string().email('Please enter a valid email address'),
+    phone: z
+        .string()
+        .regex(
+            /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+            'Please enter a valid phone number'
+        ),
+    enquiryType: z.string().min(1, 'Please select an enquiry type'),
+    customSubject: z.string().optional(),
+    message: z.string().min(10, 'Message must be at least 10 characters'),
+})
 
 export default function ContactPage() {
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        enquiryType: '',
-        message: '',
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showCustomSubject, setShowCustomSubject] = useState(false)
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            enquiryType: '',
+            customSubject: '',
+            message: '',
+        },
     })
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        // Add your form submission logic here
-        console.log(formData)
+    const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+        setIsSubmitting(true)
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+
+            if (!response.ok) throw new Error('Failed to send message')
+
+            toast.success(
+                "Message sent successfully! We'll get back to you soon.",
+                {
+                    icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+                }
+            )
+            form.reset()
+            setShowCustomSubject(false)
+        } catch (error) {
+            toast.error('Failed to send message. Please try again.', {
+                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
         <div className="container mx-auto px-4 py-16 md:py-20">
-            {/* Hero Section */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -50,106 +115,185 @@ export default function ContactPage() {
             </motion.div>
 
             <div className="grid md:grid-cols-12 gap-12 items-start">
-                {/* Contact Form */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="md:col-span-7 bg-card p-8 rounded-lg shadow-sm"
+                    className="md:col-span-7"
                 >
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <Input
-                                placeholder="First Name"
-                                value={formData.firstName}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        firstName: e.target.value,
-                                    })
-                                }
-                                required
-                            />
-                            <Input
-                                placeholder="Last Name"
-                                value={formData.lastName}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        lastName: e.target.value,
-                                    })
-                                }
-                                required
-                            />
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <Input
-                                type="email"
-                                placeholder="Email Address"
-                                value={formData.email}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        email: e.target.value,
-                                    })
-                                }
-                                required
-                            />
-                            <Input
-                                type="tel"
-                                placeholder="Phone Number"
-                                value={formData.phone}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        phone: e.target.value,
-                                    })
-                                }
-                                required
-                            />
-                        </div>
-                        <Select
-                            onValueChange={(value) =>
-                                setFormData({
-                                    ...formData,
-                                    enquiryType: value,
-                                })
-                            }
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Enquiry Type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="general">
-                                    General Inquiry
-                                </SelectItem>
-                                <SelectItem value="sales">
-                                    Sales Inquiry
-                                </SelectItem>
-                                <SelectItem value="support">
-                                    Technical Support
-                                </SelectItem>
-                                <SelectItem value="partnership">
-                                    Partnership
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Textarea
-                            placeholder="Your Message"
-                            value={formData.message}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    message: e.target.value,
-                                })
-                            }
-                            required
-                            className="min-h-[150px]"
-                        />
-                        <Button type="submit" className="w-full">
-                            Submit Enquiry
-                        </Button>
-                    </form>
+                    <div className="bg-card p-8 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] backdrop-blur-sm border border-muted/50">
+                        <Form {...form}>
+                            <form
+                                onSubmit={form.handleSubmit(handleSubmit)}
+                                className="space-y-6"
+                            >
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="firstName"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="First Name"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="lastName"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="Last Name"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        type="email"
+                                                        placeholder="Email Address"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="phone"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        type="tel"
+                                                        placeholder="Phone Number"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <FormField
+                                    control={form.control}
+                                    name="enquiryType"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <Select
+                                                onValueChange={(value) => {
+                                                    field.onChange(value)
+                                                    setShowCustomSubject(
+                                                        value === 'other'
+                                                    )
+                                                }}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select Enquiry Type" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="general">
+                                                        General Inquiry
+                                                    </SelectItem>
+                                                    <SelectItem value="sales">
+                                                        Sales Inquiry
+                                                    </SelectItem>
+                                                    <SelectItem value="support">
+                                                        Technical Support
+                                                    </SelectItem>
+                                                    <SelectItem value="partnership">
+                                                        Partnership
+                                                    </SelectItem>
+                                                    <SelectItem value="other">
+                                                        Other
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {showCustomSubject && (
+                                    <FormField
+                                        control={form.control}
+                                        name="customSubject"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="Enter your subject"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
+                                <FormField
+                                    control={form.control}
+                                    name="message"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Your Message"
+                                                    className="min-h-[150px]"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button
+                                    type="submit"
+                                    className="w-full"
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="flex items-center space-x-2"
+                                        >
+                                            <span className="loading loading-spinner loading-sm"></span>
+                                            <span>Sending...</span>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            className="flex items-center space-x-2"
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            <Send className="h-5 w-5" />
+                                            <span>Send Message</span>
+                                        </motion.div>
+                                    )}
+                                </Button>
+                            </form>
+                        </Form>
+                    </div>
                 </motion.div>
 
                 {/* Contact Information */}
@@ -159,10 +303,12 @@ export default function ContactPage() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="md:col-span-5 space-y-8"
                 >
-                    <div className="bg-card p-6 rounded-lg shadow-sm">
+                    <div className="bg-card p-8 rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] backdrop-blur-sm border border-muted/50">
                         <div className="space-y-6">
                             <div className="flex items-start gap-4">
-                                <Phone className="h-6 w-6 text-primary mt-1" />
+                                <div className="p-3 rounded-lg bg-primary/10">
+                                    <Phone className="h-6 w-6 text-primary" />
+                                </div>
                                 <div>
                                     <h3 className="font-semibold text-lg">
                                         Call Us
@@ -177,7 +323,9 @@ export default function ContactPage() {
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <Mail className="h-6 w-6 text-primary mt-1" />
+                                <div className="p-3 rounded-lg bg-primary/10">
+                                    <Mail className="h-6 w-6 text-primary" />
+                                </div>
                                 <div>
                                     <h3 className="font-semibold text-lg">
                                         Email Us
@@ -192,7 +340,9 @@ export default function ContactPage() {
                             </div>
 
                             <div className="flex items-start gap-4">
-                                <MapPin className="h-6 w-6 text-primary mt-1" />
+                                <div className="p-3 rounded-lg bg-primary/10">
+                                    <MapPin className="h-6 w-6 text-primary" />
+                                </div>
                                 <div>
                                     <h3 className="font-semibold text-lg">
                                         Visit Us
@@ -210,14 +360,25 @@ export default function ContactPage() {
                             </div>
                         </div>
                     </div>
+                </motion.div>
 
-                    {/* Map Section */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.6 }}
-                        className="bg-card rounded-lg shadow-sm overflow-hidden"
-                    >
+                {/* Map Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.8 }}
+                    className="col-span-full mt-12"
+                >
+                    <h2 className="text-2xl font-bold tracking-tight mb-6 text-center">
+                        Find Us Here
+                    </h2>
+                    <div className="relative overflow-hidden rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] border border-muted/50">
+                        <div className="absolute top-4 left-4 z-10 bg-background/95 px-4 py-2 rounded-lg backdrop-blur-sm border border-muted/50">
+                            <h3 className="font-semibold">Our Location</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Kbot, Kathmandu
+                            </p>
+                        </div>
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2400670687723!2d85.3103!3d27.7172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDQzJzAyLjAiTiA4NcKwMTgnMzcuMSJF!5e0!3m2!1sen!2snp!4v1620000000000!5m2!1sen!2snp"
                             width="100%"
@@ -225,8 +386,9 @@ export default function ContactPage() {
                             style={{ border: 0 }}
                             allowFullScreen
                             loading="lazy"
+                            className="grayscale hover:grayscale-0 transition-all duration-300"
                         ></iframe>
-                    </motion.div>
+                    </div>
                 </motion.div>
             </div>
         </div>
