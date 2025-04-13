@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Flame, Menu, X, ChevronDown } from 'lucide-react'
+import { Flame, Menu, X, ChevronDown, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import {
     DropdownMenu,
@@ -10,19 +10,46 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Button } from './ui/button'
 
 const navItems = [
     { href: '/', label: 'Home' },
     { href: '#services', label: 'Services' },
     { href: '/Products', label: 'Products' },
-    { href: '/contact', label: 'Contact' },
-  
 ]
 
 const aboutItems = [
     { href: '/about-company', label: 'About Us' },
     { href: '/about-ceo', label: 'About CEO' },
 ]
+
+const ContactButton = () => {
+    const [isHovered, setIsHovered] = useState(false)
+
+    return (
+        <Button
+            variant="default"
+            className="bg-red-600 hover:bg-red-700 text-white relative group"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            asChild
+        >
+            <Link href="/contact" className="flex items-center gap-2">
+                Contact
+                <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{
+                        opacity: isHovered ? 1 : 0,
+                        x: isHovered ? 0 : -10,
+                    }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <ArrowRight className="h-4 w-4" />
+                </motion.div>
+            </Link>
+        </Button>
+    )
+}
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
@@ -65,6 +92,7 @@ export function Navbar() {
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
+                        <ContactButton />
                     </div>
 
                     {/* Mobile Navigation Button */}
@@ -116,6 +144,9 @@ export function Navbar() {
                                 {item.label}
                             </Link>
                         ))}
+                        <div className="px-3 py-2">
+                            <ContactButton />
+                        </div>
                     </div>
                 </motion.div>
             )}
