@@ -76,32 +76,33 @@ export default function ContactPage() {
                 },
                 body: JSON.stringify(data),
             })
-
-            const result = await response.json()
-
+    
+            // Check if response is empty
+            const text = await response.text()
+            let result
+            try {
+                result = text ? JSON.parse(text) : {}
+            } catch (e) {
+                throw new Error('Invalid response from server')
+            }
+    
             if (!response.ok) {
                 throw new Error(result.error || 'Failed to send message')
             }
-
-            toast.success(
-                "Message sent successfully! We'll get back to you soon.",
-                {
-                    icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-                    duration: 5000,
-                    className: 'bg-background border-border',
-                }
-            )
+    
+            toast.success("Message sent successfully! We'll get back to you soon.", {
+                icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+                duration: 5000,
+                className: 'bg-background border-border',
+            })
             form.reset()
             setShowCustomSubject(false)
         } catch (error: any) {
-            toast.error(
-                error.message || 'Failed to send message. Please try again.',
-                {
-                    icon: <AlertCircle className="h-5 w-5 text-red-500" />,
-                    duration: 5000,
-                    className: 'bg-background border-border',
-                }
-            )
+            toast.error(error.message || 'Failed to send message. Please try again.', {
+                icon: <AlertCircle className="h-5 w-5 text-red-500" />,
+                duration: 5000,
+                className: 'bg-background border-border',
+            })
         } finally {
             setIsSubmitting(false)
         }
