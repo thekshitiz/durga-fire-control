@@ -16,7 +16,7 @@ import { Button } from './ui/button'
 
 const navItems = [
     { href: '/', label: 'Home' },
-    { href: '#services', label: 'Services' },
+    { href: '/#services', label: 'Services' },
     { href: '/Products', label: 'Products' },
 ]
 
@@ -52,10 +52,10 @@ const ContactButton = () => {
                     </motion.div>
                 </span>
             </Button>
-            
-            <ContactModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
+
+            <ContactModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
             />
         </>
     )
