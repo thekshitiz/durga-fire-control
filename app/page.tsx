@@ -16,6 +16,7 @@ import {
     ClipboardCheck, // Icon for Assessment/Audit
 } from 'lucide-react'
 import { motion } from 'framer-motion' // Import motion
+import PeopleCarousel from './PeopleCarousel'
 
 // Existing features data
 const features = [
@@ -190,6 +191,12 @@ export default function Home() {
                             </motion.div>
                         ))}
                     </motion.div>
+                </div>
+                </section>
+            <section className="py-24 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <h2 className="text-3xl font-bold mb-8">Meet Our Experts</h2>
+                        <PeopleCarousel />
                 </div>
             </section>
 
