@@ -14,10 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from './ui/button'
 
-const navItems = [
-    { href: '/', label: 'Home' },
-    { href: '/#services', label: 'Services' },
-    { href: '/Products', label: 'Products' },
+const navigationItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Services', href: '/#services' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Contact', href: '/#contact' }
 ]
 
 const aboutItems = [
@@ -79,13 +80,13 @@ export function Navbar() {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-8">
-                        {navItems.map((item) => (
+                        {navigationItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 className="text-foreground/80 hover:text-foreground transition-colors"
                             >
-                                {item.label}
+                                {item.name}
                             </Link>
                         ))}
                         <DropdownMenu>
@@ -130,14 +131,14 @@ export function Navbar() {
                     className="md:hidden"
                 >
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        {navItems.map((item) => (
+                        {navigationItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 className="block px-3 py-2 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-accent"
                                 onClick={() => setIsOpen(false)}
                             >
-                                {item.label}
+                                {item.name}
                             </Link>
                         ))}
                         {/* Mobile About Menu Items */}
