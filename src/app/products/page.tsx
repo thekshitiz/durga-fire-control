@@ -20,10 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import Slider from "react-slick";
-
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Button } from "@/components/ui/button";
 
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,56 +59,38 @@ export default function ProductsPage() {
     return filtered;
   }, [searchQuery, selectedCategory, sortBy]);
 
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-  };
-
   return (
     <div className="container mx-auto px-4 py-10">
-      {/* Top Image Carousel */}
-      <div className="mb-12">
-        <Slider {...sliderSettings}>
-          {products.slice(0, 5).map((product) => (
-            <div key={product.id} className="relative h-[400px]">
-              <Image
-                src={product.images[0] || "/placeholder.jpg"}
-                alt={product.name}
-                fill
-                className="object-cover rounded-lg"
-              />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <h2 className="text-white text-2xl font-bold">
-                  {product.name}
-                </h2>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center max-w-3xl mx-auto mb-16"
+      >
+        <h1 className="text-4xl font-bold mb-4">Our Products</h1>
+        <p className="text-lg text-muted-foreground">
+          Discover our comprehensive range of fire safety equipment and solutions
+        </p>
+      </motion.div>
 
       {/* Category Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center max-w-3xl mx-auto mb-10"
+        className="text-center max-w-4xl mx-auto mb-12"
       >
-        <h2 className="text-3xl font-bold mb-4">Product Categories</h2>
-        <div className="flex flex-wrap justify-center gap-4">
+        <h2 className="text-2xl font-semibold mb-6">Browse by Category</h2>
+        <div className="flex flex-wrap justify-center gap-3">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full border transition hover:bg-primary hover:text-white ${
+              className={`px-4 py-2 rounded-full border transition-colors ${
                 selectedCategory === cat
-                  ? "bg-primary text-white"
-                  : "bg-white text-black"
+                  ? "bg-red-600 text-white border-red-600"
+                  : "bg-white text-gray-700 border-gray-200 hover:border-red-200 hover:bg-red-50"
               }`}
             >
               {cat}
@@ -121,7 +100,7 @@ export default function ProductsPage() {
       </motion.div>
 
       {/* Filters */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
+      <div className="grid md:grid-cols-3 gap-4 mb-12">
         <div className="relative">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
@@ -164,7 +143,7 @@ export default function ProductsPage() {
 
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             No products found matching your criteria
           </p>
         </div>
@@ -180,36 +159,39 @@ function ProductCard({ product }: { product: Product }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <Card className="h-full">
+      <Card className="h-full hover:shadow-lg transition-shadow">
         <CardHeader>
-          <div className="aspect-video relative mb-4">
+          <div className="aspect-square relative mb-4 bg-gray-100 rounded-lg overflow-hidden">
             <Image
-              src={product.images[0] || "/placeholder.jpg"}
+              src={product.images[0] || "/placeholder-product.jpg"}
               alt={product.name}
               fill
-              className="object-cover rounded-lg"
+              className="object-contain p-4"
+              onError={(e) => {
+                e.currentTarget.src = "/placeholder-product.jpg";
+              }}
             />
           </div>
-          <CardTitle>{product.name}</CardTitle>
+          <CardTitle className="line-clamp-2">{product.name}</CardTitle>
           <CardDescription>{product.category}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
             {product.description}
           </p>
-          <ul className="space-y-2">
-            {product.features.map((feature, index) => (
-              <li key={index} className="text-sm flex items-center gap-2">
-                <div className="w-1 h-1 rounded-full bg-primary" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          {product.price && (
-            <p className="mt-4 text-sm font-medium text-primary">
-              {product.price}
-            </p>
-          )}
+          <div className="space-y-4">
+            <ul className="space-y-2">
+              {product.features.slice(0, 3).map((feature, index) => (
+                <li key={index} className="text-sm flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <Button className="w-full" variant="outline">
+              Contact for Price
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </motion.div>
