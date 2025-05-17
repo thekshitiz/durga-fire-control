@@ -78,5 +78,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-y: scroll !important;
+  }
+  html {
+    overflow-y: scroll !important;
   }
 }
