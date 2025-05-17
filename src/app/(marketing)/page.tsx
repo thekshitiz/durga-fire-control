@@ -13,9 +13,12 @@ import {
     Network,
     Presentation,
     ClipboardCheck,
+    ChevronRight,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { TestimonialsCarousel } from '@/components/ui/carousel/PeopleCarousel'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
+import { Link } from '@/components/ui/link'
 
 // Existing features data
 const features = [
@@ -222,6 +225,72 @@ export default function Home() {
                     >
                         Get Started Today
                     </Button>
+                </div>
+            </section>
+
+            {/* FAQ Preview Section */}
+            <section className="py-24 bg-background">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold tracking-tight">
+                            Common Questions
+                        </h2>
+                        <p className="mt-4 text-lg text-muted-foreground">
+                            Quick answers to frequently asked questions about our services
+                        </p>
+                    </div>
+
+                    <Accordion type="single" collapsible className="space-y-4 mb-8">
+                        <AccordionItem
+                            value="1"
+                            className="bg-card border rounded-lg px-6"
+                        >
+                            <AccordionTrigger className="text-left text-lg font-medium py-6">
+                                What types of fire safety equipment do you sell?
+                            </AccordionTrigger>
+                            <AccordionContent className="text-muted-foreground pb-6">
+                                We sell fire extinguishers, smoke detectors, fire alarms, fire blankets, hose reels, sprinkler systems, safety signs, and more.
+                            </AccordionContent>
+                        </AccordionItem>
+
+                        <AccordionItem
+                            value="2"
+                            className="bg-card border rounded-lg px-6"
+                        >
+                            <AccordionTrigger className="text-left text-lg font-medium py-6">
+                                Do you offer installation services?
+                            </AccordionTrigger>
+                            <AccordionContent className="text-muted-foreground pb-6">
+                                Yes, professional installation is available in most cities. Schedule it during checkout or via support.
+                            </AccordionContent>
+                        </AccordionItem>
+
+                        <AccordionItem
+                            value="3"
+                            className="bg-card border rounded-lg px-6"
+                        >
+                            <AccordionTrigger className="text-left text-lg font-medium py-6">
+                                Do you offer Annual Maintenance Contracts (AMC)?
+                            </AccordionTrigger>
+                            <AccordionContent className="text-muted-foreground pb-6">
+                                Yes! We provide AMC plans for residential, commercial, and industrial clients.
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+
+                    <div className="text-center">
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            className="gap-2"
+                            asChild
+                        >
+                            <Link href="/faq">
+                                View All FAQs
+                                <ChevronRight className="w-4 h-4" />
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </section>
         </div>
