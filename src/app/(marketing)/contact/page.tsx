@@ -253,7 +253,7 @@ export default function ContactPage() {
                                             <FormItem>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder="Enter your subject"
+                                                        placeholder="Custom Subject"
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -280,23 +280,16 @@ export default function ContactPage() {
                                 />
                                 <Button
                                     type="submit"
-                                    className="w-full relative group"
+                                    className="w-full"
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? (
-                                        <motion.div
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            className="flex items-center justify-center space-x-2"
-                                        >
-                                            <span className="loading loading-spinner loading-sm"></span>
-                                            <span>Sending...</span>
-                                        </motion.div>
+                                        'Sending...'
                                     ) : (
-                                        <span className="flex items-center justify-center space-x-2">
-                                            <span>Send Message</span>
-                                            <Send className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                                        </span>
+                                        <>
+                                            <Send className="mr-2 h-4 w-4" />
+                                            Send Message
+                                        </>
                                     )}
                                 </Button>
                             </form>
@@ -304,101 +297,61 @@ export default function ContactPage() {
                     </div>
                 </motion.div>
 
-                {/* Contact Information */}
-                <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                    className="md:col-span-5 space-y-8"
-                >
-                    <div className="bg-card p-8 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.07)] backdrop-blur-sm border border-muted/50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-shadow duration-300">
-                        <div className="space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 rounded-lg bg-primary/10">
-                                    <Phone className="h-6 w-6 text-primary" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-lg">
-                                        Call Us
-                                    </h3>
-                                    <p className="text-muted-foreground">
-                                        +977-9800000000
-                                    </p>
-                                    <p className="text-muted-foreground">
-                                        +977-01-4000000
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 rounded-lg bg-primary/10">
-                                    <Mail className="h-6 w-6 text-primary" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-lg">
-                                        Email Us
-                                    </h3>
-                                    <p className="text-muted-foreground">
-                                        info@durgafirecontrol.com
-                                    </p>
-                                    <p className="text-muted-foreground">
-                                        support@durgafirecontrol.com
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 rounded-lg bg-primary/10">
-                                    <MapPin className="h-6 w-6 text-primary" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-lg">
-                                        Visit Us
-                                    </h3>
-                                    <p className="text-muted-foreground">
-                                        Kbot
-                                    </p>
-                                    <p className="text-muted-foreground">
-                                        Kathmandu, Bagmati
-                                    </p>
-                                    <p className="text-muted-foreground">
-                                        Nepal - 44600
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Map Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.8 }}
-                    className="col-span-full mt-12"
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="md:col-span-5"
                 >
-                    <h2 className="text-2xl font-bold tracking-tight mb-6 text-center">
-                        Find Us Here
-                    </h2>
-                    <div className="relative overflow-hidden rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] border border-muted/50">
-                        <div className="absolute top-4 left-4 z-10 bg-background/95 px-4 py-2 rounded-lg backdrop-blur-sm border border-muted/50">
-                            <h3 className="font-semibold">Our Location</h3>
-                            <p className="text-sm text-muted-foreground">
-                                Kbot, Kathmandu
-                            </p>
+                    <div className="space-y-8">
+                        <div className="bg-card p-6 rounded-xl border">
+                            <h2 className="text-xl font-semibold mb-4">
+                                Contact Information
+                            </h2>
+                            <div className="space-y-4">
+                                <div className="flex items-start gap-3">
+                                    <MapPin className="h-5 w-5 text-primary mt-1" />
+                                    <div>
+                                        <h3 className="font-medium">Address</h3>
+                                        <p className="text-muted-foreground">
+                                            123 Fire Safety Street, Kathmandu, Nepal
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Phone className="h-5 w-5 text-primary mt-1" />
+                                    <div>
+                                        <h3 className="font-medium">Phone</h3>
+                                        <p className="text-muted-foreground">
+                                            +977 1-1234567
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Mail className="h-5 w-5 text-primary mt-1" />
+                                    <div>
+                                        <h3 className="font-medium">Email</h3>
+                                        <p className="text-muted-foreground">
+                                            info@durgafirecontrol.com
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Clock className="h-5 w-5 text-primary mt-1" />
+                                    <div>
+                                        <h3 className="font-medium">Business Hours</h3>
+                                        <p className="text-muted-foreground">
+                                            Mon - Fri: 9:00 AM - 6:00 PM
+                                            <br />
+                                            Sat: 9:00 AM - 1:00 PM
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2400670687723!2d85.3103!3d27.7172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDQzJzAyLjAiTiA4NcKwMTgnMzcuMSJF!5e0!3m2!1sen!2snp!4v1620000000000!5m2!1sen!2snp"
-                            width="100%"
-                            height="300"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            loading="lazy"
-                            className="grayscale hover:grayscale-0 transition-all duration-300"
-                        ></iframe>
                     </div>
                 </motion.div>
             </div>
         </div>
     )
-}
+} 

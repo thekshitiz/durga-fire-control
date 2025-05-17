@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 
 const people = [
   {
@@ -70,4 +70,4 @@ export default function PeopleCarousel() {
       </button>
     </div>
   )
-}
+} 

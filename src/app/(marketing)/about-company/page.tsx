@@ -258,76 +258,38 @@ export default function AboutCompany() {
                 </div>
             </motion.section>
 
-            {/* Why Choose Us Section */}
-            <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="bg-secondary/30 p-12 rounded-2xl"
-            >
-                <h2 className="text-3xl font-bold mb-8 text-center">
-                    Why Choose Durga Fire Control?
-                </h2>
-                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <WhyChooseUsItem
-                        icon={ShieldCheck}
-                        title="Industry Expertise"
-                        description="Three decades of excellence in fire safety assessment, installation, and maintenance."
-                    />
-                    <WhyChooseUsItem
-                        icon={PackageCheck}
-                        title="Premium Solutions"
-                        description="Curated selection of internationally certified fire safety equipment."
-                    />
-                    <WhyChooseUsItem
-                        icon={Zap}
-                        title="End-to-End Service"
-                        description="Comprehensive solutions from initial consultation to ongoing support."
-                    />
-                    <WhyChooseUsItem
-                        icon={Users}
-                        title="Dedicated Support"
-                        description="Round-the-clock assistance from our experienced professional team."
-                    />
-                </div>
-            </motion.section>
-
-            {/* Enhanced Call to Action Section */}
+            {/* CTA Section */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="text-center space-y-6 bg-primary/5 rounded-3xl p-12"
+                className="text-center py-16 bg-primary/5 rounded-2xl"
             >
-                <div className="space-y-4 max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-bold">
-                        Let's Protect What Matters Most
-                    </h2>
-                    <p className="text-muted-foreground text-lg">
-                        Every minute counts when it comes to fire safety. Join
-                        the thousands of businesses and families who trust Durga
-                        Fire Control to protect their most valuable assets.
-                    </p>
-                </div>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                    <Button asChild size="lg" className="text-base">
+                <h2 className="text-3xl font-bold mb-6">
+                    Join Us in Making Nepal Safer
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+                    Be part of our mission to protect lives and properties
+                    across Nepal. Whether you're looking for fire safety
+                    solutions or want to join our team, we'd love to hear from
+                    you.
+                </p>
+                <div className="flex justify-center gap-4">
+                    <Button size="lg" asChild>
                         <Link href="/contact">
-                            Schedule a Free Safety Assessment{' '}
+                            Contact Us
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                     </Button>
-                    <Button
-                        asChild
-                        variant="outline"
-                        size="lg"
-                        className="text-base"
-                    >
-                        <Link href="/catalog">Browse Our Safety Solutions</Link>
+                    <Button size="lg" variant="outline" asChild>
+                        <Link href="/careers">
+                            Join Our Team
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
                     </Button>
                 </div>
             </motion.section>
         </div>
     )
-}
+} 

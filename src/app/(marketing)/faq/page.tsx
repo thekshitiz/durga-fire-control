@@ -34,7 +34,6 @@ const faqCategories = [
                 question: "Do you have eco-friendly options?",
                 answer: "Yes, we carry water mist and clean agent extinguishers that are non-toxic and environmentally safe."
             },
-            // ... add remaining product information questions
         ]
     },
     {
@@ -53,7 +52,6 @@ const faqCategories = [
                 question: "Can I track my order?",
                 answer: "Yes, tracking details are sent via email/SMS once your order ships."
             },
-            // ... add remaining shipping questions
         ]
     },
     {
@@ -72,7 +70,6 @@ const faqCategories = [
                 question: "Do you offer Annual Maintenance Contracts (AMC)?",
                 answer: "Yes! We provide AMC plans for residential, commercial, and industrial clients."
             },
-            // ... add remaining maintenance questions
         ]
     }
 ]
@@ -125,4 +122,4 @@ export default function FAQPage() {
             ))}
         </div>
     )
-}
+} 

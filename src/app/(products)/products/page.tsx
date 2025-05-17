@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { products, categories, type Product } from "@/data/products";
+import { products, categories, type Product } from "@/lib/data/products";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -214,4 +214,4 @@ function ProductCard({ product }: { product: Product }) {
       </Card>
     </motion.div>
   );
-}
+} 

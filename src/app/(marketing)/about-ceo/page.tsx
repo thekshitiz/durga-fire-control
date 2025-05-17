@@ -115,4 +115,4 @@ export default function AboutCEO() {
             </motion.div>
         </div>
     );
-}
+} 

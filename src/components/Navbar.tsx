@@ -17,9 +17,9 @@ import { Button } from "./ui/button";
 const navigationItems = [
   { name: "Home", href: "/" },
   { name: "Services", href: "/#services" },
-  { name: "FAQ", href: "/faq" },
   { name: "Products", href: "/Products" },
-  { name: "Contact", href: "/#contact" },
+  // { name: "FAQ", href: "/faq" },
+
 ];
 
 const aboutItems = [
