@@ -85,7 +85,7 @@ export default function PrivacyPolicy() {
                     <ul className="list-none pl-6 mb-4">
                         <li>Email: privacy@durgafirecontrol.com</li>
                         <li>Phone: +977-1-1234567</li>
-                        <li>Address: 123 Fire Safety Street, Kathmandu, Nepal</li>
+                        <li>Address: Thulo Kharibot, New Baneshwor, Kathmandu, Nepal</li>
                     </ul>
                 </section>
             </motion.div>

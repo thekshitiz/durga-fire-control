@@ -41,7 +41,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-sm">
-              <li>123 Fire Safety Street</li>
+              <li>Thulo Kharibot, New Baneshwor</li>
               <li>Kathmandu, Bagmati</li>
               <li>Nepal - 44600</li>
               <li>Tel: +977-1-1234567</li>
