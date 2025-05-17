@@ -1,73 +1,162 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import useEmblaCarousel from 'embla-carousel-react'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight, Star, StarHalf } from 'lucide-react'
+import { motion } from 'framer-motion'
 
-const people = [
+const testimonials = [
   {
-    name: 'Person 1',
-    role: 'Fire Technician',
-    image: 'https://via.placeholder.com/120',
+    name: 'Prakash Shrestha',
+    role: 'Hotel Manager',
+    company: 'Grand Hotel Kathmandu',
+    rating: 5,
+    testimonial: 'Durga Fire Control has been instrumental in ensuring our hotel\'s safety. Their professional team and prompt service give us peace of mind.',
+    image: '/testimonials/hotel-manager.jpg'
   },
   {
-    name: 'Person 2',
-    role: 'Inspector',
-    image: 'https://via.placeholder.com/120',
+    name: 'Sarita Maharjan',
+    role: 'Factory Director',
+    company: 'Nepal Textile Industries',
+    rating: 5,
+    testimonial: 'Outstanding service! They helped us implement a comprehensive fire safety system that perfectly meets our industrial requirements.',
+    image: '/testimonials/factory-director.jpg'
   },
   {
-    name: 'Person 3',
-    role: 'Trainer',
-    image: 'https://via.placeholder.com/120',
+    name: 'Ram Adhikari',
+    role: 'Building Manager',
+    company: 'City Center Mall',
+    rating: 4.5,
+    testimonial: 'Regular maintenance and quick response times. Their team is always professional and knowledgeable about the latest safety standards.',
+    image: '/testimonials/building-manager.jpg'
   },
   {
-    name: 'Person 4',
-    role: 'Safety Auditor',
-    image: 'https://via.placeholder.com/120',
-  },
-  {
-    name: 'Person 5',
-    role: 'Field Engineer',
-    image: 'https://via.placeholder.com/120',
+    name: 'Anjali Gurung',
+    role: 'School Principal',
+    company: 'Modern Academy',
+    rating: 5,
+    testimonial: 'The training sessions they conducted for our staff were excellent. They made fire safety easy to understand and implement.',
+    image: '/testimonials/principal.jpg'
   },
 ]
 
-export default function PeopleCarousel() {
-  const [current, setCurrent] = useState(0)
-  const total = people.length
-
-  const next = () => setCurrent((prev) => (prev + 1) % total)
-  const prev = () => setCurrent((prev) => (prev - 1 + total) % total)
+const StarRating = ({ rating }: { rating: number }) => {
+  const fullStars = Math.floor(rating)
+  const hasHalfStar = rating % 1 !== 0
 
   return (
-    <div className="relative w-full max-w-xl mx-auto overflow-hidden bg-white rounded-xl shadow">
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${current * 100}%)`, width: `${total * 100}%` }}
-      >
-        {people.map((person, index) => (
-          <div
-            key={index}
-            className="w-full flex-shrink-0 p-6 flex flex-col items-center text-center"
-          >
-            <img src={person.image} alt={person.name} className="w-28 h-28 rounded-full mb-4" />
-            <h3 className="text-xl font-bold">{person.name}</h3>
-            <p className="text-gray-500">{person.role}</p>
-          </div>
-        ))}
+    <div className="flex gap-1 text-yellow-400">
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={i} className="w-5 h-5 fill-current" />
+      ))}
+      {hasHalfStar && <StarHalf className="w-5 h-5 fill-current" />}
+    </div>
+  )
+}
+
+export function TestimonialsCarousel() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true,
+    dragFree: true,
+  })
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
+
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi])
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi])
+  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi])
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+  }, [emblaApi])
+
+  useEffect(() => {
+    if (!emblaApi) return
+    onSelect()
+    setScrollSnaps(emblaApi.scrollSnapList())
+    emblaApi.on('select', onSelect)
+    return () => {
+      emblaApi.off('select', onSelect)
+    }
+  }, [emblaApi, onSelect])
+
+  return (
+    <div className="relative max-w-5xl mx-auto px-4">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex -ml-4">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={index}
+              className="flex-[0_0_100%] min-w-0 pl-4 md:flex-[0_0_50%] lg:flex-[0_0_33.3333%]"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <div className="bg-card h-full rounded-xl p-6 shadow-lg border hover:border-red-200 transition-colors">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-16 h-16 flex-shrink-0">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-full h-full object-cover rounded-full"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://via.placeholder.com/64?text=Client'
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{testimonial.name}</h3>
+                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      <p className="text-sm text-red-600">{testimonial.company}</p>
+                    </div>
+                  </div>
+                  
+                  <StarRating rating={testimonial.rating} />
+                  
+                  <blockquote className="mt-4 flex-grow">
+                    <p className="text-muted-foreground italic">"{testimonial.testimonial}"</p>
+                  </blockquote>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Buttons */}
-      <button
-        onClick={prev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70"
-      >
-        &#10094;
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70"
-      >
-        &#10095;
-      </button>
+      {/* Navigation */}
+      <div className="flex justify-between items-center mt-8">
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full hover:bg-red-50 hover:text-red-600 transition-colors"
+          onClick={scrollPrev}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+
+        <div className="flex gap-2">
+          {scrollSnaps.map((_, index) => (
+            <button
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                index === selectedIndex ? 'bg-red-600' : 'bg-gray-300 hover:bg-red-300'
+              }`}
+              onClick={() => scrollTo(index)}
+            />
+          ))}
+        </div>
+
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full hover:bg-red-50 hover:text-red-600 transition-colors"
+          onClick={scrollNext}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   )
 } 

@@ -15,7 +15,7 @@ import {
     ClipboardCheck,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
-import PeopleCarousel from '@/components/ui/carousel/PeopleCarousel'
+import { TestimonialsCarousel } from '@/components/ui/carousel/PeopleCarousel'
 
 // Existing features data
 const features = [
@@ -189,11 +189,18 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Team Section */}
-            <section className="py-24 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-3xl font-bold mb-8">Meet Our Experts</h2>
-                    <PeopleCarousel />
+            {/* Testimonials Section */}
+            <section className="py-24 bg-secondary/20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold tracking-tight">
+                            What Our Clients Say
+                        </h2>
+                        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                            Don't just take our word for it - hear from some of our satisfied clients about their experience with Durga Fire Control.
+                        </p>
+                    </div>
+                    <TestimonialsCarousel />
                 </div>
             </section>
 
