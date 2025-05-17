@@ -20,7 +20,8 @@ export default function RefundPolicy() {
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">1. Overview</h2>
                     <p>
-                        At Durga Fire Control, we stand behind the quality of our products and services. This refund policy outlines the terms and conditions for returns and refunds, in compliance with Nepal's consumer protection laws.
+                        At Durga Fire Control, we stand behind the quality of our products and services. This refund policy outlines Durga Fire Control&apos;s procedures
+                        and conditions for refunds on our products and services.
                     </p>
                 </section>
 

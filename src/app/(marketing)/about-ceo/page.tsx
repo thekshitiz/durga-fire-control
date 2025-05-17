@@ -105,10 +105,8 @@ export default function AboutCEO() {
                 >
                     <h2 className="text-3xl font-bold mb-6">Our Vision Forward</h2>
                     <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                        "My commitment is to continue innovating and expanding our services,
-                        ensuring that every business and household in Nepal has access to
-                        the best fire safety solutions. Together, we're building a safer
-                        future for all."
+                        &ldquo;Our mission is to make Nepal a safer place, one building at a time.
+                        We&apos;re not just a business; we&apos;re a commitment to safety.&rdquo;
                     </p>
                     <p className="text-primary font-semibold mt-4">- Kamal Ojha</p>
                 </motion.div>

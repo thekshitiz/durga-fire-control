@@ -90,9 +90,9 @@ export default function AboutCompany() {
                     Protecting Lives Since 1995
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2">
-                    At Durga Fire Control, we don't just sell fire safety
+                    At Durga Fire Control, we don&apos;t just sell fire safety
                     equipment – we provide peace of mind. For over 25 years,
-                    we've been the trusted guardian of Nepal's homes,
+                    we&apos;ve been the trusted guardian of Nepal&apos;s homes,
                     businesses, and communities.
                 </p>
             </motion.div>
@@ -109,8 +109,8 @@ export default function AboutCompany() {
                         Our Legacy
                     </h2>
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                        From our humble beginnings in 1995, we've grown into
-                        Nepal's trusted leader in fire safety. Our journey is
+                        From our humble beginnings in 1995, we&apos;ve grown into
+                        Nepal&apos;s trusted leader in fire safety. Our journey is
                         marked by continuous innovation and an unwavering
                         commitment to excellence.
                     </p>
@@ -272,8 +272,8 @@ export default function AboutCompany() {
                 </h2>
                 <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8">
                     Be part of our mission to protect lives and properties
-                    across Nepal. Whether you're looking for fire safety
-                    solutions or want to join our team, we'd love to hear from
+                    across Nepal. Whether you&apos;re looking for fire safety
+                    solutions or want to join our team, we&apos;d love to hear from
                     you.
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">

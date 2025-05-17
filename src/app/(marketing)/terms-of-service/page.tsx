@@ -20,14 +20,16 @@ export default function TermsOfService() {
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">1. Agreement to Terms</h2>
                     <p>
-                        By accessing or using Durga Fire Control's services, you agree to be bound by these Terms of Service and all applicable laws and regulations of Nepal. If you do not agree with any of these terms, you are prohibited from using our services.
+                        By accessing and using Durga Fire Control&apos;s website and services,
+                        you agree to be bound by these terms. If you don&apos;t agree with
+                        any part of these terms, you may not use our services.
                     </p>
                 </section>
 
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">2. Products and Services</h2>
                     <ul className="list-disc pl-6 mb-4">
-                        <li>All products comply with Nepal's fire safety standards and regulations</li>
+                        <li>All products comply with Nepal&apos;s fire safety standards and regulations</li>
                         <li>Product specifications and prices are subject to change without notice</li>
                         <li>Installation services are provided by certified professionals</li>
                         <li>Regular maintenance is required as per manufacturer guidelines</li>
@@ -47,7 +49,7 @@ export default function TermsOfService() {
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">4. Warranty and Returns</h2>
                     <p>
-                        Our products come with manufacturer warranties as per Nepali consumer protection laws. Specific warranty terms vary by product type and are provided at the time of purchase.
+                        Our products come with manufacturer warranties as per Nepal&apos;s consumer protection laws. Specific warranty terms vary by product type and are provided at the time of purchase.
                     </p>
                     <ul className="list-disc pl-6 mb-4">
                         <li>Manufacturing defects are covered under warranty</li>
@@ -75,7 +77,7 @@ export default function TermsOfService() {
                     <ul className="list-disc pl-6 mb-4">
                         <li>Product replacement under warranty terms</li>
                         <li>Service rectification for installation issues</li>
-                        <li>Compliance with Nepal's consumer protection laws</li>
+                        <li>Compliance with Nepal&apos;s consumer protection laws</li>
                     </ul>
                 </section>
 

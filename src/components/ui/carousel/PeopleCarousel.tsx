@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, Star, StarHalf } from 'lucide-react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 const testimonials = [
   {
@@ -12,7 +13,7 @@ const testimonials = [
     role: 'Hotel Manager',
     company: 'Grand Hotel Kathmandu',
     rating: 5,
-    testimonial: 'Durga Fire Control has been instrumental in ensuring our hotel\'s safety. Their professional team and prompt service give us peace of mind.',
+    testimonial: 'Durga Fire Control has been instrumental in ensuring our hotel&apos;s safety. Their professional team and prompt service give us peace of mind.',
     image: '/testimonials/hotel-manager.jpg'
   },
   {
@@ -96,14 +97,13 @@ export function TestimonialsCarousel() {
               <div className="bg-card h-full rounded-xl p-6 shadow-lg border hover:border-red-200 transition-colors">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 flex-shrink-0">
-                      <img
+                    <div className="w-24 h-24 flex-shrink-0">
+                      <Image
                         src={testimonial.image}
                         alt={testimonial.name}
-                        className="w-full h-full object-cover rounded-full"
-                        onError={(e) => {
-                          e.currentTarget.src = 'https://via.placeholder.com/64?text=Client'
-                        }}
+                        width={100}
+                        height={100}
+                        className="w-24 h-24 rounded-full object-cover mx-auto mb-4"
                       />
                     </div>
                     <div>
@@ -115,9 +115,9 @@ export function TestimonialsCarousel() {
                   
                   <StarRating rating={testimonial.rating} />
                   
-                  <blockquote className="mt-4 flex-grow">
-                    <p className="text-muted-foreground italic">"{testimonial.testimonial}"</p>
-                  </blockquote>
+                  <p className="text-lg italic mb-4">
+                    &ldquo;{testimonial.testimonial}&rdquo;
+                  </p>
                 </div>
               </div>
             </motion.div>

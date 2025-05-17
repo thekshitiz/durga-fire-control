@@ -200,7 +200,7 @@ export default function Home() {
                             What Our Clients Say
                         </h2>
                         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Don't just take our word for it - hear from some of our satisfied clients about their experience with Durga Fire Control.
+                            Don&apos;t just take our word for it - hear from some of our satisfied clients about their experience with Durga Fire Control.
                         </p>
                     </div>
                     <TestimonialsCarousel />

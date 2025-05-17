@@ -9,6 +9,7 @@ import {
     CheckCircle,
     Send,
     AlertCircle,
+    Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,6 +35,15 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 
+const inquiryTypes = [
+    { value: 'service', label: 'Service Inquiry' },
+    { value: 'product', label: 'Product Inquiry' },
+    { value: 'quote', label: 'Quote Request' },
+    { value: 'support', label: 'Support Request' },
+    { value: 'partnership', label: 'Partnership Inquiry' },
+    { value: 'other', label: 'Other' },
+] as const
+
 const formSchema = z.object({
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -44,29 +54,33 @@ const formSchema = z.object({
             /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
             'Please enter a valid phone number'
         ),
-    enquiryType: z.string().min(1, 'Please select an enquiry type'),
+    enquiryType: z.enum(['service', 'product', 'quote', 'support', 'partnership', 'other'], {
+        errorMap: () => ({ message: 'Please select a valid inquiry type' })
+    }),
     customSubject: z.string().optional(),
     message: z.string().min(10, 'Message must be at least 10 characters'),
 })
+
+type FormValues = z.infer<typeof formSchema>
 
 export default function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [showCustomSubject, setShowCustomSubject] = useState(false)
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             firstName: '',
             lastName: '',
             email: '',
             phone: '',
-            enquiryType: '',
+            enquiryType: undefined,
             customSubject: '',
             message: '',
         },
     })
 
-    const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    const handleSubmit = async (data: FormValues) => {
         setIsSubmitting(true)
         try {
             const response = await fetch('/api/contact', {
@@ -82,14 +96,24 @@ export default function ContactPage() {
             try {
                 result = text ? JSON.parse(text) : {}
             } catch (e) {
+                console.error('Failed to parse server response:', e)
                 throw new Error('Invalid response from server')
             }
     
             if (!response.ok) {
+                if (result.details) {
+                    // Handle validation errors from the server
+                    result.details.forEach((error: { path: string[]; message: string }) => {
+                        form.setError(error.path[0] as keyof FormValues, {
+                            type: 'server',
+                            message: error.message,
+                        })
+                    })
+                }
                 throw new Error(result.error || 'Failed to send message')
             }
     
-            toast.success("Message sent successfully! We'll get back to you soon.", {
+            toast.success("Message sent successfully! We&apos;ll get back to you soon.", {
                 icon: <CheckCircle className="h-5 w-5 text-green-500" />,
                 duration: 5000,
                 className: 'bg-background border-border',
@@ -102,8 +126,9 @@ export default function ContactPage() {
                 duration: 5000,
                 className: 'bg-background border-border',
             })
+        } finally {
+            setIsSubmitting(false)
         }
-        setIsSubmitting(false)
     }
 
     return (
@@ -116,11 +141,11 @@ export default function ContactPage() {
                 className="text-center max-w-3xl mx-auto mb-12"
             >
                 <h1 className="text-4xl font-bold tracking-tight mb-4">
-                    Let's Start a Conversation
+                    Let&apos;s Start a Conversation
                 </h1>
                 <p className="text-lg text-muted-foreground">
                     Whether you need fire safety solutions, technical support,
-                    or just want to learn more about our services - we're ready
+                    or want to explore partnership opportunities - we&apos;re ready
                     to help you every step of the way.
                 </p>
             </motion.div>
@@ -151,6 +176,7 @@ export default function ContactPage() {
                                                     <Input
                                                         placeholder="First Name"
                                                         {...field}
+                                                        disabled={isSubmitting}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -167,6 +193,7 @@ export default function ContactPage() {
                                                     <Input
                                                         placeholder="Last Name"
                                                         {...field}
+                                                        disabled={isSubmitting}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -187,6 +214,7 @@ export default function ContactPage() {
                                                         type="email"
                                                         placeholder="Email Address"
                                                         {...field}
+                                                        disabled={isSubmitting}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -204,6 +232,7 @@ export default function ContactPage() {
                                                         type="tel"
                                                         placeholder="Phone Number"
                                                         {...field}
+                                                        disabled={isSubmitting}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -217,38 +246,31 @@ export default function ContactPage() {
                                     name="enquiryType"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Enquiry Type</FormLabel>
-                                            <Select
-                                                onValueChange={(value) => {
-                                                    field.onChange(value)
-                                                    setShowCustomSubject(
-                                                        value === 'other'
-                                                    )
-                                                }}
-                                            >
-                                                <FormControl>
+                                            <FormLabel>Inquiry Type</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    value={field.value}
+                                                    onValueChange={(value) => {
+                                                        field.onChange(value);
+                                                        setShowCustomSubject(value === 'other');
+                                                    }}
+                                                    disabled={isSubmitting}
+                                                >
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Select Enquiry Type" />
+                                                        <SelectValue placeholder="Select inquiry type" />
                                                     </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value="general">
-                                                        General Inquiry
-                                                    </SelectItem>
-                                                    <SelectItem value="sales">
-                                                        Sales Inquiry
-                                                    </SelectItem>
-                                                    <SelectItem value="support">
-                                                        Technical Support
-                                                    </SelectItem>
-                                                    <SelectItem value="partnership">
-                                                        Partnership
-                                                    </SelectItem>
-                                                    <SelectItem value="other">
-                                                        Other
-                                                    </SelectItem>
-                                                </SelectContent>
-                                            </Select>
+                                                    <SelectContent>
+                                                        {inquiryTypes.map((type) => (
+                                                            <SelectItem 
+                                                                key={type.value} 
+                                                                value={type.value}
+                                                            >
+                                                                {type.label}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -260,11 +282,12 @@ export default function ContactPage() {
                                         name="customSubject"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Subject</FormLabel>
+                                                <FormLabel>Custom Subject</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder="Custom Subject"
+                                                        placeholder="Enter subject"
                                                         {...field}
+                                                        disabled={isSubmitting}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -284,6 +307,7 @@ export default function ContactPage() {
                                                     placeholder="Your Message"
                                                     className="min-h-[150px]"
                                                     {...field}
+                                                    disabled={isSubmitting}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -297,7 +321,10 @@ export default function ContactPage() {
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? (
-                                        'Sending...'
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Sending...
+                                        </>
                                     ) : (
                                         <>
                                             <Send className="mr-2 h-4 w-4" />
@@ -329,13 +356,12 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="font-medium">Address</h3>
                                         <p className="text-muted-foreground">
-                                        Thulo Kharibot, New Baneshwor
+                                            Thulo Kharibot, New Baneshwor
                                             <br />
                                             Kathmandu, Nepal
                                         </p>
                                         <a
-                                            href="https://www.google.com/maps?q=Thulo+Kharibot+,+New+Baneshwor
-Kathmandu, Nepalreet+Kathmandu+Nepal"
+                                            href="https://www.google.com/maps?q=Thulo+Kharibot+,+New+Baneshwor+Kathmandu,+Nepal"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-sm text-primary hover:underline mt-1 inline-block"

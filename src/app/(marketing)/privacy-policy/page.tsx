@@ -20,7 +20,9 @@ export default function PrivacyPolicy() {
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
                     <p>
-                        Durga Fire Control ("we," "our," or "us") respects your privacy and is committed to protecting your personal data in accordance with Nepal's privacy laws and international best practices. This privacy policy explains how we collect, use, and protect your information when you use our services.
+                        Durga Fire Control (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) respects your privacy and is committed to protecting your personal data in accordance with Nepal&apos;s privacy laws and international best practices. This Privacy Policy describes how your personal information is collected,
+                        used, and shared when you visit or make a purchase from Durga Fire Control&apos;s
+                        website (&ldquo;the Site&rdquo;).
                     </p>
                 </section>
 
@@ -61,7 +63,7 @@ export default function PrivacyPolicy() {
                 <section className="mb-8">
                     <h2 className="text-2xl font-semibold mb-4">5. Data Security</h2>
                     <p>
-                        We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. These measures comply with Nepal's data protection requirements.
+                        We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. These measures comply with Nepal&apos;s data protection requirements.
                     </p>
                 </section>
 

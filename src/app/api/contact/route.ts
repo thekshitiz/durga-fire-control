@@ -1,75 +1,97 @@
 import { NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import { emailService } from '@/lib/email'
+import { z } from 'zod'
+import {
+    getServiceInquiryTemplate,
+    getProductInquiryTemplate,
+    getQuoteRequestTemplate,
+    getSupportRequestTemplate,
+    getGeneralInquiryTemplate,
+} from '@/lib/email-templates'
+
+// Cache the validation schema
+const contactSchema = z.object({
+    firstName: z.string().min(2, 'First name must be at least 2 characters').trim(),
+    lastName: z.string().min(2, 'Last name must be at least 2 characters').trim(),
+    email: z.string().email('Please enter a valid email address').toLowerCase().trim(),
+    phone: z.string().regex(
+        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+        'Please enter a valid phone number'
+    ).trim(),
+    enquiryType: z.enum([
+        'service',
+        'product',
+        'quote',
+        'support',
+        'partnership',
+        'other'
+    ], {
+        errorMap: () => ({ message: 'Please select a valid inquiry type' })
+    }),
+    customSubject: z.string().optional(),
+    message: z.string().min(10, 'Message must be at least 10 characters').trim(),
+})
+
+// Template mapping for better performance
+const TEMPLATE_MAP = {
+    service: getServiceInquiryTemplate,
+    product: getProductInquiryTemplate,
+    quote: getQuoteRequestTemplate,
+    support: getSupportRequestTemplate,
+    other: getGeneralInquiryTemplate,
+    partnership: getGeneralInquiryTemplate,
+} as const;
 
 export async function POST(request: Request) {
-    // Check for email configuration
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-        console.error('Missing email configuration')
-        return NextResponse.json(
-            { error: 'Email service not configured' },
-            { status: 500 }
-        )
-    }
-
     try {
-        const body = await request.json()
+        // Parse JSON with error handling
+        let body;
+        try {
+            body = await request.json()
+        } catch (e) {
+            return NextResponse.json(
+                { error: 'Invalid JSON payload' },
+                { status: 400 }
+            )
+        }
+        
+        // Validate the request body
+        const validatedData = contactSchema.parse(body)
 
-        // Create email transporter
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.GMAIL_USER,
-                pass: process.env.GMAIL_APP_PASSWORD,
-            },
+        // Get template function from map
+        const getTemplate = TEMPLATE_MAP[validatedData.enquiryType]
+        const template = getTemplate(validatedData)
+
+        // Send the email with proper subject formatting
+        const success = await emailService.sendEmail({
+            to: process.env.CONTACT_EMAIL || 'contact@durgafirecontrol.com',
+            subject: `[${validatedData.enquiryType.toUpperCase()}] New Inquiry from ${validatedData.firstName} ${validatedData.lastName}`,
+            text: template.text,
+            html: template.html,
         })
 
-        // Destructure form data
-        const {
-            firstName,
-            lastName,
-            email,
-            phone,
-            enquiryType,
-            customSubject,
-            message,
-        } = body
-
-        // Configure email subject
-        const subject =
-            enquiryType === 'other'
-                ? customSubject
-                : `${enquiryType.charAt(0).toUpperCase() + enquiryType.slice(1)} Inquiry from ${firstName} ${lastName}`
-
-        // Configure email options
-        const mailOptions = {
-            from: process.env.GMAIL_USER,
-            to: process.env.GMAIL_USER,
-            replyTo: email,
-            subject: subject,
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                    <h2>New Contact Form Submission</h2>
-                    <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-                    <p><strong>Email:</strong> ${email}</p>
-                    <p><strong>Phone:</strong> ${phone}</p>
-                    <p><strong>Inquiry Type:</strong> ${enquiryType}</p>
-                    <p><strong>Message:</strong></p>
-                    <p>${message}</p>
-                </div>
-            `,
+        if (!success) {
+            return NextResponse.json(
+                { error: 'Failed to send email' },
+                { status: 500 }
+            )
         }
-
-        // Send email
-        await transporter.sendMail(mailOptions)
 
         return NextResponse.json(
             { message: 'Email sent successfully' },
             { status: 200 }
         )
     } catch (error) {
-        console.error('Failed to send email:', error)
+        if (error instanceof z.ZodError) {
+            return NextResponse.json(
+                { error: 'Invalid form data', details: error.errors },
+                { status: 400 }
+            )
+        }
+
+        console.error('Contact form error:', error)
         return NextResponse.json(
-            { error: 'Failed to send email. Please try again later.' },
+            { error: 'Internal server error' },
             { status: 500 }
         )
     }
