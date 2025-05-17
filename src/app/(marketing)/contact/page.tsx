@@ -77,7 +77,6 @@ export default function ContactPage() {
                 body: JSON.stringify(data),
             })
     
-            // Check if response is empty
             const text = await response.text()
             let result
             try {
@@ -103,13 +102,13 @@ export default function ContactPage() {
                 duration: 5000,
                 className: 'bg-background border-border',
             })
-        } finally {
-            setIsSubmitting(false)
         }
+        setIsSubmitting(false)
     }
 
     return (
         <div className="container mx-auto px-4 py-16 md:py-20">
+            {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -126,7 +125,9 @@ export default function ContactPage() {
                 </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-12 gap-12 items-start">
+            {/* Main Content */}
+            <div className="grid md:grid-cols-12 gap-8 md:gap-12">
+                {/* Contact Form */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -145,6 +146,7 @@ export default function ContactPage() {
                                         name="firstName"
                                         render={({ field }) => (
                                             <FormItem>
+                                                <FormLabel>First Name</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         placeholder="First Name"
@@ -160,6 +162,7 @@ export default function ContactPage() {
                                         name="lastName"
                                         render={({ field }) => (
                                             <FormItem>
+                                                <FormLabel>Last Name</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         placeholder="Last Name"
@@ -171,12 +174,14 @@ export default function ContactPage() {
                                         )}
                                     />
                                 </div>
+
                                 <div className="grid md:grid-cols-2 gap-4">
                                     <FormField
                                         control={form.control}
                                         name="email"
                                         render={({ field }) => (
                                             <FormItem>
+                                                <FormLabel>Email</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type="email"
@@ -193,6 +198,7 @@ export default function ContactPage() {
                                         name="phone"
                                         render={({ field }) => (
                                             <FormItem>
+                                                <FormLabel>Phone</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type="tel"
@@ -205,11 +211,13 @@ export default function ContactPage() {
                                         )}
                                     />
                                 </div>
+
                                 <FormField
                                     control={form.control}
                                     name="enquiryType"
                                     render={({ field }) => (
                                         <FormItem>
+                                            <FormLabel>Enquiry Type</FormLabel>
                                             <Select
                                                 onValueChange={(value) => {
                                                     field.onChange(value)
@@ -245,12 +253,14 @@ export default function ContactPage() {
                                         </FormItem>
                                     )}
                                 />
+
                                 {showCustomSubject && (
                                     <FormField
                                         control={form.control}
                                         name="customSubject"
                                         render={({ field }) => (
                                             <FormItem>
+                                                <FormLabel>Subject</FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         placeholder="Custom Subject"
@@ -262,11 +272,13 @@ export default function ContactPage() {
                                         )}
                                     />
                                 )}
+
                                 <FormField
                                     control={form.control}
                                     name="message"
                                     render={({ field }) => (
                                         <FormItem>
+                                            <FormLabel>Message</FormLabel>
                                             <FormControl>
                                                 <Textarea
                                                     placeholder="Your Message"
@@ -278,6 +290,7 @@ export default function ContactPage() {
                                         </FormItem>
                                     )}
                                 />
+
                                 <Button
                                     type="submit"
                                     className="w-full"
@@ -297,6 +310,7 @@ export default function ContactPage() {
                     </div>
                 </motion.div>
 
+                {/* Contact Information */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -304,6 +318,7 @@ export default function ContactPage() {
                     className="md:col-span-5"
                 >
                     <div className="space-y-8">
+                        {/* Contact Details */}
                         <div className="bg-card p-6 rounded-xl border">
                             <h2 className="text-xl font-semibold mb-4">
                                 Contact Information
@@ -314,26 +329,43 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="font-medium">Address</h3>
                                         <p className="text-muted-foreground">
-                                            123 Fire Safety Street, Kathmandu, Nepal
+                                        Thulo Kharibot, New Baneshwor
+                                            <br />
+                                            Kathmandu, Nepal
                                         </p>
+                                        <a
+                                            href="https://www.google.com/maps?q=Thulo+Kharibot+,+New+Baneshwor
+Kathmandu, Nepalreet+Kathmandu+Nepal"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-sm text-primary hover:underline mt-1 inline-block"
+                                        >
+                                            View on Google Maps
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <Phone className="h-5 w-5 text-primary mt-1" />
                                     <div>
                                         <h3 className="font-medium">Phone</h3>
-                                        <p className="text-muted-foreground">
+                                        <a
+                                            href="tel:+97711234567"
+                                            className="text-muted-foreground hover:text-primary transition-colors"
+                                        >
                                             +977 1-1234567
-                                        </p>
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <Mail className="h-5 w-5 text-primary mt-1" />
                                     <div>
                                         <h3 className="font-medium">Email</h3>
-                                        <p className="text-muted-foreground">
+                                        <a
+                                            href="mailto:info@durgafirecontrol.com"
+                                            className="text-muted-foreground hover:text-primary transition-colors"
+                                        >
                                             info@durgafirecontrol.com
-                                        </p>
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
@@ -341,13 +373,28 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="font-medium">Business Hours</h3>
                                         <p className="text-muted-foreground">
-                                            Mon - Fri: 9:00 AM - 6:00 PM
+                                            Monday - Friday: 9:00 AM - 6:00 PM
                                             <br />
-                                            Sat: 9:00 AM - 1:00 PM
+                                            Saturday: 9:00 AM - 2:00 PM
+                                            <br />
+                                            Sunday: Closed
                                         </p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Google Maps */}
+                        <div className="bg-card rounded-xl border overflow-hidden">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.8767235499095!2d85.34027137575298!3d27.690204776192385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19fba8c7e259%3A0x3391e319b117599d!2sThulo%20Kharibot!5e0!3m2!1sen!2snp!4v1747459794813!5m2!1sen!2snp"
+                                width="100%"
+                                height="300"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
                         </div>
                     </div>
                 </motion.div>

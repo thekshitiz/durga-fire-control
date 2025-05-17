@@ -47,7 +47,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     </Link>
 
                     <Link
-                        href="https://maps.google.com/?q=YourAddress"
+                        href="https://maps.google.com/?q=Thulo Kharibot"
                         target="_blank"
                         onClick={onClose}
                     >
